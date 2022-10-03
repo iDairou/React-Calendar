@@ -1,6 +1,6 @@
 class CalendarProvider {
   constructor() {
-    this.apiUrl = "http://localhost:3005/meetings";
+    this.url = "http://localhost:3005/meetings";
   }
   loadData() {
     return this._fetch();
@@ -39,9 +39,6 @@ class CalendarProvider {
         }
         throw new Error("Network error!");
       })
-      .then((resp) => {
-        console.log(resp);
-      });
   }
 }
 export default CalendarProvider

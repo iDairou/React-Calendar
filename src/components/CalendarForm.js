@@ -1,4 +1,5 @@
 import React from "react";
+import CalendarProvider from "./calendarProvider";
 class CalendarForm extends React.Component {
   state = {
     firstName: "",
@@ -7,11 +8,15 @@ class CalendarForm extends React.Component {
     date: "",
     time: "",
   };
+  constructor(props) {
+    super(props);
+    this.api = new CalendarProvider();
+  }
   render() {
     const { firstName, lastName, email, date, time } = this.state;
-    console.log(this.state);
+    const { onSubmit } = this.props;
     return (
-      <form className="panel__form" onSubmit={this.handleSubmit}>
+      <form className="panel__form" onSubmit={this.setNewMeeting}>
         <label>
           First name:{" "}
           <input
@@ -37,7 +42,7 @@ class CalendarForm extends React.Component {
           <input
             onChange={this.handleChange}
             value={email}
-            type="temail"
+            type="email"
             name="email"
             required
           ></input>{" "}
@@ -73,8 +78,20 @@ class CalendarForm extends React.Component {
       [e.target.name]: value,
     });
   };
-  handleSubmit = (e) => {
+  setNewMeeting = (e) => {
     e.preventDefault();
+    const { firstName, lastName, email, date, time } = this.state;
+    const newMeeting = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      date: date,
+      time: time,
+    };
+    this.sendNewMeetingToJSON(newMeeting);
+  };
+  sendNewMeetingToJSON = (data) => {
+    return this.api.addData(data).then((resp) => console.log(resp));
   };
 }
 export default CalendarForm;
