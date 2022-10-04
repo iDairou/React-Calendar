@@ -14,7 +14,6 @@ class CalendarForm extends React.Component {
   }
   render() {
     const { firstName, lastName, email, date, time } = this.state;
-    const { onSubmit } = this.props;
     return (
       <form className="panel__form" onSubmit={this.setNewMeeting}>
         <label>
@@ -24,7 +23,6 @@ class CalendarForm extends React.Component {
             value={firstName}
             type="text"
             name="firstName"
-            required
           ></input>
         </label>
         <label>
@@ -34,7 +32,6 @@ class CalendarForm extends React.Component {
             value={lastName}
             type="text"
             name="lastName"
-            required
           ></input>{" "}
         </label>
         <label>
@@ -44,7 +41,6 @@ class CalendarForm extends React.Component {
             value={email}
             type="email"
             name="email"
-            required
           ></input>{" "}
         </label>
         <label>
@@ -54,7 +50,6 @@ class CalendarForm extends React.Component {
             value={date}
             type="date"
             name="date"
-            required
           ></input>{" "}
         </label>
         <label>
@@ -64,7 +59,6 @@ class CalendarForm extends React.Component {
             value={time}
             type="time"
             name="time"
-            required
           ></input>{" "}
         </label>
         <input type="submit" value="Add meeting!" />
@@ -78,8 +72,10 @@ class CalendarForm extends React.Component {
       [e.target.name]: value,
     });
   };
-  setNewMeeting = (e) => {
+  setNewMeeting = async (e) => {
     e.preventDefault();
+    const { updateData } = this.props;
+
     const { firstName, lastName, email, date, time } = this.state;
     const newMeeting = {
       firstName: firstName,
@@ -88,7 +84,8 @@ class CalendarForm extends React.Component {
       date: date,
       time: time,
     };
-    this.sendNewMeetingToJSON(newMeeting);
+    await this.sendNewMeetingToJSON(newMeeting);
+    updateData();
   };
   sendNewMeetingToJSON = (data) => {
     return this.api.addData(data).then((resp) => console.log(resp));
